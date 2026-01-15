@@ -15,6 +15,7 @@
 <script type="text/babel">
   const { useState } = React;
 
+  // Lucide React Icons (simplified inline versions)
   const ChevronLeft = ({ size = 24, className = "" }) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <polyline points="15 18 9 12 15 6"></polyline>
@@ -63,347 +64,479 @@
     </svg>
   );
 
-  const slides = [
-    {
-      title: "SPI – Serial Peripheral Interface",
-      subtitle: "Synchrones serielles Kommunikationsprotokoll",
-      content: (
-        <div className="text-center space-y-6">
-          <div className="mb-4">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/SPI_three_slaves.svg/800px-SPI_three_slaves.svg.png" alt="SPI Verbindungsschema" className="mx-auto max-h-64 rounded-lg shadow-lg" />
-          </div>
-          <p className="text-2xl text-gray-700">Kurzstrecken-Datenübertragung zwischen Mikrocontrollern und Peripheriegeräten</p>
-          <p className="text-xl text-gray-500 mt-4">Entwickelt von Motorola</p>
-          <div className="flex justify-center gap-8 mt-8">
-            <div className="flex items-center gap-2">
-              <Zap className="text-yellow-500" size={32} />
-              <span className="text-lg">Schnell</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Cpu className="text-blue-500" size={32} />
-              <span className="text-lg">Hardware-nah</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="text-green-500" size={32} />
-              <span className="text-lg">Einfach</span>
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      title: "Typische Einsatzgebiete",
-      content: (
-        <div className="space-y-4">
-          <div className="grid grid-cols-3 gap-4">
-            <div className="bg-blue-50 p-4 rounded-lg text-center">
-              <img src="https://europe1.discourse-cdn.com/arduino/original/4X/4/e/a/4eaf98fa06e4b2dacb743e15f0e68ce3d0df0697.png" alt="Arduino" className="mx-auto h-24 mb-2 object-contain" />
-              <h3 className="font-bold text-lg text-blue-900">Mikrocontroller</h3>
-            </div>
-            <div className="bg-purple-50 p-4 rounded-lg text-center">
-              <img src="https://electronics.semaf.at/media/image/product/1364/lg/bme280-i2c-or-spi-temperature-humidity-pressure-sensor.jpg" alt="Sensor" className="mx-auto h-24 mb-2 object-contain" />
-              <h3 className="font-bold text-lg text-purple-900">Sensoren (BME280)</h3>
-            </div>
-            <div className="bg-green-50 p-4 rounded-lg text-center">
-              <img src="https://www.first-components.com/DataLoader/materiale/img-cat/TFT%20SPI-Arduino_cat.png" alt="Display" className="mx-auto h-24 mb-2 object-contain" />
-              <h3 className="font-bold text-lg text-green-900">Displays</h3>
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-4">
-            <div className="bg-orange-50 p-4 rounded-lg text-center">
-              <img src="https://lh6.googleusercontent.com/proxy/lF7oDwBXNVN8w4_addT5sVfLkN756KDW_v4mBVojkd9WIQeFDmj0d3wSg1T4skZ_GLjcIY83WeMvzxHESDhq" alt="SD-Karte" className="mx-auto h-24 mb-2 object-contain rounded" />
-              <h3 className="font-bold text-lg text-orange-900">SD-Karten</h3>
-            </div>
-            <div className="bg-red-50 p-4 rounded-lg text-center">
-              <img src="https://botland.de/img/art/inne/22383_2.jpg" alt="Flash Speicher" className="mx-auto h-24 mb-2 object-contain" />
-              <h3 className="font-bold text-lg text-red-900">Flash / EEPROM</h3>
-            </div>
-            <div className="bg-indigo-50 p-4 rounded-lg text-center">
-              <img src="https://www.pantechsolutions.net/wp-content/uploads/2021/09/spiadcdac1_2.jpg" alt="ADC DAC" className="mx-auto h-24 mb-2 object-contain" />
-              <h3 className="font-bold text-lg text-indigo-900">ADCs / DACs</h3>
-            </div>
-          </div>
-          <div className="bg-gray-100 p-4 rounded-lg text-center">
-            <p className="text-lg font-semibold text-gray-800">Embedded-Systeme & Echtzeitsysteme</p>
-          </div>
-        </div>
-      )
-    },
-    {
-      title: "Beteiligte Rollen",
-      content: (
-        <div className="space-y-6">
-          <div className="flex items-center gap-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-lg">
-            <div>
-              <h3 className="font-bold text-2xl mb-2">Master</h3>
-              <p className="text-lg">Steuert die Kommunikation, erzeugt den Takt (SCLK), setzt CS/SS</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4 bg-gradient-to-r from-gray-500 to-gray-600 text-white p-6 rounded-lg">
-            <div>
-              <h3 className="font-bold text-2xl mb-2">Slave(s)</h3>
-              <p className="text-lg">Antwortet auf Master; MISO wird nur aktiv, wenn CS=Low</p>
-            </div>
-          </div>
-          <div className="bg-yellow-50 border-2 border-yellow-400 p-6 rounded-lg">
-            <img src="https://www.circuitbasics.com/wp-content/uploads/2016/01/Introduction-to-SPI-Master-and-Slave.png" alt="Master-Slave Schema" className="mx-auto max-w-full rounded-lg shadow-lg mb-4" />
-            <p className="text-xl font-semibold text-gray-800 text-center">
-              Ein Master kann mit einem oder mehreren Slaves kommunizieren
-            </p>
-          </div>
-        </div>
-      )
-    },
-    {
-      title: "Leitungen (Signale)",
-      content: (
-        <div className="space-y-4">
-          <div className="mb-4">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/SPI_8-bit_circular_transfer.svg/800px-SPI_8-bit_circular_transfer.svg.png" alt="SPI Signale" className="mx-auto max-h-48 rounded-lg shadow-lg" />
-          </div>
-          <div className="bg-blue-50 border-l-4 border-blue-500 p-5 rounded">
-            <h3 className="font-bold text-lg text-blue-900">MOSI (Master Out Slave In)</h3>
-            <p className="text-gray-700">Daten vom Master zum Slave</p>
-          </div>
-          <div className="bg-green-50 border-l-4 border-green-500 p-5 rounded">
-            <h3 className="font-bold text-lg text-green-900">MISO (Master In Slave Out)</h3>
-            <p className="text-gray-700">Daten vom Slave zum Master</p>
-          </div>
-          <div className="bg-purple-50 border-l-4 border-purple-500 p-5 rounded">
-            <h3 className="font-bold text-lg text-purple-900">SCLK / SCK</h3>
-            <p className="text-gray-700">Taktleitung vom Master</p>
-          </div>
-          <div className="bg-orange-50 border-l-4 border-orange-500 p-5 rounded">
-            <h3 className="font-bold text-lg text-orange-900">SS / CS (Slave Select / Chip Select)</h3>
-            <p className="text-gray-700">Aktiviert einen bestimmten Slave; Low-aktiv</p>
-          </div>
-        </div>
-      )
-    },
-    {
-      title: "Elektrische Parameter & Timing",
-      content: (
-        <div className="space-y-3 text-gray-800">
-          <p className="font-semibold">Pegel: typisch 3,3 V oder 5 V (abhängig von MCU/Slave); Level-Shifter bei Mischspannungen nutzen.</p>
-          <p className="font-semibold">Taktflanken: SCLK Rise/Fall-Time beeinflusst Störsicherheit; saubere Kanten & kurze Leitungen.</p>
-          <p className="font-semibold">Setup/Hold: Daten stabil um die Sample-Flanke (CPHA) halten; Datenvalidierung je nach Datenblatt (z.B. tSU, tH).</p>
-          <p className="font-semibold">MISO-Tri-State: Nicht adressierte Slaves müssen MISO hochohmig schalten (oder Bus-Transceiver nutzen).</p>
-          <p className="font-semibold">Leitungslängen: Faustregel bei flachen Kabeln ca. wenige 10 cm bei >10 MHz; verdrillte Adern & GND-Referenz helfen.</p>
-        </div>
-      )
-    },
-    {
-      title: "Protokoll-Details",
-      content: (
-        <div className="space-y-3 text-gray-800">
-          <p className="font-semibold">Datenrahmen: meist 8 Bit, oft auch 16/24/32 Bit möglich (abhängig von MCU-Peripherie).</p>
-          <p className="font-semibold">Bit-Reihenfolge: Standard MSB-first, manche Slaves unterstützen LSB-first.</p>
-          <p className="font-semibold">CS-Verhalten: Viele Slaves werten steigende Flanke auf CS als Frame-Ende; manche brauchen Mindest-High-Zeit (tCSS, tCSH).</p>
-          <p className="font-semibold">Zwischenbits: Inter-Frame-Delay oft erforderlich (z.B. tDIS, tV); Datenblatt beachten.</p>
-          <p className="font-semibold">Vollduplex: TX und RX laufen parallel; wenn Slave nichts sendet, liest der Master Dummy-Bytes (0xFF/0x00).</p>
-        </div>
-      )
-    },
-    {
-      title: "Taktmodi (CPOL/CPHA)",
-      content: (
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white p-4 rounded text-center shadow">
-              <p className="font-bold">Modus 0</p>
-              <p className="text-sm text-gray-600">CPOL=0, CPHA=0 (Sample an steigender Flanke, Idle Low)</p>
-            </div>
-            <div className="bg-white p-4 rounded text-center shadow">
-              <p className="font-bold">Modus 1</p>
-              <p className="text-sm text-gray-600">CPOL=0, CPHA=1 (Sample an fallender Flanke, Idle Low)</p>
-            </div>
-            <div className="bg-white p-4 rounded text-center shadow">
-              <p className="font-bold">Modus 2</p>
-              <p className="text-sm text-gray-600">CPOL=1, CPHA=0 (Sample an fallender Flanke, Idle High)</p>
-            </div>
-            <div className="bg-white p-4 rounded text-center shadow">
-              <p className="font-bold">Modus 3</p>
-              <p className="text-sm text-gray-600">CPOL=1, CPHA=1 (Sample an steigender Flanke, Idle High)</p>
-            </div>
-          </div>
-          <div className="bg-yellow-50 border-2 border-yellow-400 p-4 rounded-lg text-center">
-            <p className="font-semibold text-gray-800">Master und Slave müssen denselben Modus verwenden; Timing-Diagramme im Datenblatt prüfen.</p>
-          </div>
-        </div>
-      )
-    },
-    {
-      title: "Performance & Grenzen",
-      content: (
-        <div className="space-y-3 text-gray-800">
-          <p className="font-semibold">Taktfrequenzen: typisch 1–20 MHz bei MCUs; viele Flash/Sensoren erlauben 50–120 MHz im High-Speed-Mode.</p>
-          <p className="font-semibold">Leitungslänge vs. Takt: grobe Faustregel fCLK (MHz) · Länge (m) < ~50 für ungeschirmte Kabel. Bei höheren Frequenzen: Terminierung/Abschirmung nutzen.</p>
-          <p className="font-semibold">Jitter & Skew: MISO-Skew durch Leitungslänge und Treiber; bei langen Strecken ggf. Clock-Delay oder geringere fCLK.</p>
-          <p className="font-semibold">Overhead: Kein Protokoll-Layer; Chip-Select und Bytetransfer bestimmen Durchsatz.</p>
-        </div>
-      )
-    },
-    {
-      title: "Layout & SI (Signal Integrity)",
-      content: (
-        <div className="space-y-3 text-gray-800">
-          <p className="font-semibold">GND-Referenz nahe führen; SCLK mit GND verdrillen oder Microstrip mit Rückstrompfad.</p>
-          <p className="font-semibold">Terminatoren: Serienwiderstand 22–47 Ω nahe am Treiber auf SCLK/MOSI kann Overshoot dämpfen.</p>
-          <p className="font-semibold">MISO-Bus: Nur ein Slave treibt MISO; alternativ MISO-Puffer (z.B. 74HC125) pro Slave.</p>
-          <p className="font-semibold">Crosstalk: Abstand zwischen SCLK und MISO erhöhen oder dazwischen GND führen.</p>
-          <p className="font-semibold">EMI: Kürzere Leitungen, saubere Masse, ggf. Schirmung bei langen Zuleitungen.</p>
-        </div>
-      )
-    },
-    {
-      title: "Multi-Slave & Topologien",
-      content: (
-        <div className="space-y-3 text-gray-800">
-          <p className="font-semibold">Stern-Topologie üblich: gemeinsame MOSI/MISO/SCLK, separate CS pro Slave.</p>
-          <p className="font-semibold">Daisy-Chain: Einige Bausteine (z.B. Schieberegister, bestimmte DACs) unterstützen serielle Ketten – CS umschließt die gesamte Kette.</p>
-          <p className="font-semibold">Pull-ups auf CS: stellen definierten High-Pegel sicher, wenn Master-Pin im Reset ist.</p>
-          <p className="font-semibold">Level-Shifting: für Mixed-Voltage-Systeme (3,3 V Master, 5 V Slave) auf allen relevanten Leitungen einsetzen.</p>
-        </div>
-      )
-    },
-    {
-      title: "Vorteile",
-      content: (
-        <div className="space-y-4">
-          <div className="flex items-center gap-4 bg-green-50 p-5 rounded-lg">
-            <CheckCircle className="text-green-500 flex-shrink-0" size={32} />
-            <div>
-              <h3 className="font-bold text-lg">Sehr hohe Datenrate</h3>
-              <p className="text-gray-600">Bis weit über 10 MHz, teils >100 MHz</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4 bg-green-50 p-5 rounded-lg">
-            <CheckCircle className="text-green-500 flex-shrink-0" size={32} />
-            <div>
-              <h3 className="font-bold text-lg">Einfache Implementierung</h3>
-              <p className="text-gray-600">Nahe an der Hardware, kaum Overhead</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4 bg-green-50 p-5 rounded-lg">
-            <CheckCircle className="text-green-500 flex-shrink-0" size={32} />
-            <div>
-              <h3 className="font-bold text-lg">Vollduplex</h3>
-              <p className="text-gray-600">Senden und Empfangen gleichzeitig</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4 bg-green-50 p-5 rounded-lg">
-            <CheckCircle className="text-green-500 flex-shrink-0" size={32} />
-            <div>
-              <h3 className="font-bold text-lg">Geringer Protokoll-Overhead</h3>
-              <p className="text-gray-600">Keine Adressierung im Bus erforderlich</p>
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      title: "Nachteile",
-      content: (
-        <div className="space-y-4">
-          <div className="flex items-center gap-4 bg-red-50 p-5 rounded-lg">
-            <XCircle className="text-red-500 flex-shrink-0" size={32} />
-            <div>
-              <h3 className="font-bold text-lg">Mehr Leitungen als I²C</h3>
-              <p className="text-gray-600">Mindestens 4 Signale, plus CS je Slave</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4 bg-red-50 p-5 rounded-lg">
-            <XCircle className="text-red-500 flex-shrink-0" size={32} />
-            <div>
-              <h3 className="font-bold text-lg">Kein Adressierungssystem</h3>
-              <p className="text-gray-600">CS-Verwaltung im Master nötig</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4 bg-red-50 p-5 rounded-lg">
-            <XCircle className="text-red-500 flex-shrink-0" size={32} />
-            <div>
-              <h3 className="font-bold text-lg">Kein standardisiertes Fehlerhandling</h3>
-              <p className="text-gray-600">Muss in Software/Protokollschicht ergänzt werden</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4 bg-red-50 p-5 rounded-lg">
-            <XCircle className="text-red-500 flex-shrink-0" size={32} />
-            <div>
-              <h3 className="font-bold text-lg">Kabellänge begrenzt</h3>
-              <p className="text-gray-600">Empfindlich gegenüber Leitungslänge und Störungen</p>
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      title: "Vergleich zu anderen Bussen",
-      content: (
-        <div className="space-y-6">
-          <div className="bg-blue-50 p-6 rounded-lg">
-            <h3 className="font-bold text-xl mb-3 text-blue-900">SPI vs I²C</h3>
-            <div className="space-y-2 text-gray-700">
-              <p>✓ Höhere Datenrate, Vollduplex</p>
-              <p>✗ Mehr Leitungen, keine Adressen</p>
-              <p>→ I²C besser für viele Slaves, SPI besser für Speed</p>
-            </div>
-          </div>
-          <div className="bg-purple-50 p-6 rounded-lg">
-            <h3 className="font-bold text-xl mb-3 text-purple-900">SPI vs UART</h3>
-            <div className="space-y-2 text-gray-700">
-              <p>✓ Synchrone Taktung, kein Baud-Matching</p>
-              <p>✓ Mehrgeräte möglich (über CS)</p>
-              <p>✗ Mehr Pins als UART (2 Leitungen)</p>
-            </div>
-          </div>
-          <div className="bg-green-50 p-6 rounded-lg">
-            <h3 className="font-bold text-xl mb-3 text-green-900">SPI vs CAN</h3>
-            <div className="space-y-2 text-gray-700">
-              <p>✓ Einfach, schnell, geringer Overhead</p>
-              <p>✗ Keine Fehlerkorrektur, keine Adressierung, weniger robust</p>
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      title: "Zusammenfassung",
-      content: (
-        <div className="space-y-8">
-          <div className="text-center">
-            <div className="text-6xl mb-6">🎯</div>
-            <h3 className="text-2xl font-bold mb-4 text-gray-800">
-              SPI ist schnell, hardware-nah und ideal für performante Peripherie auf kurzer Distanz
-            </h3>
-          </div>
-          <div className="grid grid-cols-1 gap-4">
-            <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-lg text-center">
-              <p className="text-xl font-semibold">Nutze korrektes CPOL/CPHA, passende Taktfrequenz & sauberes Layout</p>
-            </div>
-            <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-lg text-center">
-              <p className="text-xl font-semibold">CS-Management, Inter-Frame-Delays und Signal-Integrität beachten</p>
-            </div>
-          </div>
-          <div className="bg-gray-100 p-6 rounded-lg">
-            <h4 className="font-bold text-lg mb-3 text-center">Ideal wenn...</h4>
-            <ul className="space-y-2 text-gray-700">
-              <li>• Hohe Geschwindigkeit benötigt wird</li>
-              <li>• Kurze Verbindungen und klare Topologie vorliegen</li>
-              <li>• Einfacher, deterministischer Bus ohne Adressierung gewünscht ist</li>
-              <li>• Vollduplex-Kommunikation erforderlich ist</li>
-            </ul>
-          </div>
-        </div>
-      )
-    }
-  ];
-
   const SPIPresentation = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
 
-    const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
-    const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-    const goToSlide = (index) => setCurrentSlide(index);
+    const slides = [
+      {
+        title: "SPI – Serial Peripheral Interface",
+        subtitle: "Synchrones serielles Kommunikationsprotokoll",
+        content: (
+          <div className="text-center space-y-6">
+            <div className="mb-4">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/SPI_three_slaves.svg/800px-SPI_three_slaves.svg.png" alt="SPI Verbindungsschema" className="mx-auto max-h-64 rounded-lg shadow-lg" />
+            </div>
+            <p className="text-2xl text-gray-700">Kurzstrecken-Datenübertragung zwischen Mikrocontrollern und Peripheriegeräten</p>
+            <p className="text-xl text-gray-500 mt-4">Entwickelt von Motorola (1980er Jahre)</p>
+            <div className="grid grid-cols-3 gap-4 mt-6 text-left">
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <p className="text-sm text-gray-600">Übertragungsrate</p>
+                <p className="text-xl font-bold text-blue-900">10-100 MHz</p>
+                <p className="text-xs text-gray-500">Typisch: 1-50 MHz</p>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg">
+                <p className="text-sm text-gray-600">Betriebsspannung</p>
+                <p className="text-xl font-bold text-green-900">1.8V - 5V</p>
+                <p className="text-xs text-gray-500">Geräteabhängig</p>
+              </div>
+              <div className="bg-purple-50 p-4 rounded-lg">
+                <p className="text-sm text-gray-600">Max. Kabellänge</p>
+                <p className="text-xl font-bold text-purple-900">~3m</p>
+                <p className="text-xs text-gray-500">Bei niedrigen MHz</p>
+              </div>
+            </div>
+            <div className="flex justify-center gap-8 mt-8">
+              <div className="flex items-center gap-2">
+                <Zap className="text-yellow-500" size={32} />
+                <span className="text-lg">Vollduplex</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Cpu className="text-blue-500" size={32} />
+                <span className="text-lg">Master-Slave</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="text-green-500" size={32} />
+                <span className="text-lg">4-Wire</span>
+              </div>
+            </div>
+          </div>
+        )
+      },
+      {
+        title: "Typische Einsatzgebiete",
+        content: (
+          <div className="space-y-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="bg-blue-50 p-4 rounded-lg text-center">
+                <img src="https://europe1.discourse-cdn.com/arduino/original/4X/4/e/a/4eaf98fa06e4b2dacb743e15f0e68ce3d0df0697.png" alt="Arduino" className="mx-auto h-24 mb-2 object-contain" />
+                <h3 className="font-bold text-lg text-blue-900">Mikrocontroller</h3>
+                <p className="text-xs text-gray-600 mt-1">Arduino, STM32, ESP32</p>
+                <p className="text-xs text-gray-500">SPI0, SPI1, HSPI/VSPI</p>
+              </div>
+              <div className="bg-purple-50 p-4 rounded-lg text-center">
+                <img src="https://electronics.semaf.at/media/image/product/1364/lg/bme280-i2c-or-spi-temperature-humidity-pressure-sensor.jpg" alt="Sensor" className="mx-auto h-24 mb-2 object-contain" />
+                <h3 className="font-bold text-lg text-purple-900">Sensoren (BME280)</h3>
+                <p className="text-xs text-gray-600 mt-1">Temp., Luftfeuchte, Druck</p>
+                <p className="text-xs text-gray-500">Max. 10 MHz SPI</p>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg text-center">
+                <img src="https://www.first-components.com/DataLoader/materiale/img-cat/TFT%20SPI-Arduino_cat.png" alt="Display" className="mx-auto h-24 mb-2 object-contain" />
+                <h3 className="font-bold text-lg text-green-900">Displays</h3>
+                <p className="text-xs text-gray-600 mt-1">TFT, OLED, E-Paper</p>
+                <p className="text-xs text-gray-500">Bis 80 MHz (ILI9341)</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="bg-orange-50 p-4 rounded-lg text-center">
+                <img src="https://m.media-amazon.com/images/I/61u7Kh2ImTL._AC_SL1500_.jpg" alt="SD-Karte" className="mx-auto h-24 mb-2 object-contain rounded" />
+                <h3 className="font-bold text-lg text-orange-900">SD-Karten</h3>
+                <p className="text-xs text-gray-600 mt-1">Datenspeicherung</p>
+                <p className="text-xs text-gray-500">25-50 MHz SPI Mode</p>
+              </div>
+              <div className="bg-red-50 p-4 rounded-lg text-center">
+                <img src="https://botland.de/img/art/inne/22383_2.jpg" alt="Flash Speicher" className="mx-auto h-24 mb-2 object-contain" />
+                <h3 className="font-bold text-lg text-red-900">Flash / EEPROM</h3>
+                <p className="text-xs text-gray-600 mt-1">W25Q, AT25, 24LC</p>
+                <p className="text-xs text-gray-500">Bis 133 MHz (Quad-SPI)</p>
+              </div>
+              <div className="bg-indigo-50 p-4 rounded-lg text-center">
+                <img src="https://www.pantechsolutions.net/wp-content/uploads/2021/09/spiadcdac1_2.jpg" alt="ADC DAC" className="mx-auto h-24 mb-2 object-contain" />
+                <h3 className="font-bold text-lg text-indigo-900">ADCs / DACs</h3>
+                <p className="text-xs text-gray-600 mt-1">MCP3008, MCP4922</p>
+                <p className="text-xs text-gray-500">10-50 MHz, 8-16 bit</p>
+              </div>
+            </div>
+            <div className="bg-gray-100 p-4 rounded-lg text-center">
+              <p className="text-lg font-semibold text-gray-800">Embedded-Systeme & Echtzeitsysteme</p>
+              <p className="text-sm text-gray-600 mt-1">IoT, Industriesteuerung, Automotive (Sensor-Hubs), Medizintechnik</p>
+            </div>
+          </div>
+        )
+      },
+      {
+        title: "Beteiligte Rollen",
+        content: (
+          <div className="space-y-6">
+            <div className="flex items-center gap-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-lg">
+              <div>
+                <h3 className="font-bold text-2xl mb-2">Master</h3>
+                <p className="text-lg">Steuert die Kommunikation und erzeugt den Takt</p>
+                <p className="text-sm mt-2 text-blue-100">• Initiiert alle Datenübertragungen</p>
+                <p className="text-sm text-blue-100">• Generiert SCK-Signal (1-100 MHz)</p>
+                <p className="text-sm text-blue-100">• Kontrolliert CS-Leitungen</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 bg-gradient-to-r from-gray-500 to-gray-600 text-white p-6 rounded-lg">
+              <div>
+                <h3 className="font-bold text-2xl mb-2">Slave(s)</h3>
+                <p className="text-lg">Reagiert auf den Master</p>
+                <p className="text-sm mt-2 text-gray-100">• Wartet auf CS-Aktivierung (LOW)</p>
+                <p className="text-sm text-gray-100">• Synchronisiert sich mit SCK</p>
+                <p className="text-sm text-gray-100">• Kann keine Übertragung initiieren</p>
+              </div>
+            </div>
+            <div className="bg-yellow-50 border-2 border-yellow-400 p-6 rounded-lg">
+              <img src="https://www.circuitbasics.com/wp-content/uploads/2016/01/Introduction-to-SPI-Master-and-Slave.png" alt="Master-Slave Schema" className="mx-auto max-w-full rounded-lg shadow-lg mb-4" />
+              <p className="text-xl font-semibold text-gray-800 text-center">
+                Ein Master kann mit einem oder mehreren Slaves kommunizieren
+              </p>
+              <p className="text-sm text-gray-600 text-center mt-2">
+                Multi-Slave Setup: Gemeinsame MOSI/MISO/SCK, separate CS pro Slave
+              </p>
+            </div>
+          </div>
+        )
+      },
+      {
+        title: "Leitungen (Signale)",
+        content: (
+          <div className="space-y-4">
+            <div className="mb-4">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/SPI_8-bit_circular_transfer.svg/800px-SPI_8-bit_circular_transfer.svg.png" alt="SPI Signale" className="mx-auto max-h-48 rounded-lg shadow-lg" />
+            </div>
+            <div className="bg-blue-50 border-l-4 border-blue-500 p-5 rounded">
+              <h3 className="font-bold text-lg text-blue-900">MOSI (Master Out Slave In)</h3>
+              <p className="text-gray-700">Daten vom Master zum Slave</p>
+              <p className="text-sm text-gray-600 mt-1">Alt. Namen: SDO (Serial Data Out), DO, DOUT, SO, MTSR</p>
+            </div>
+            <div className="bg-green-50 border-l-4 border-green-500 p-5 rounded">
+              <h3 className="font-bold text-lg text-green-900">MISO (Master In Slave Out)</h3>
+              <p className="text-gray-700">Daten vom Slave zum Master</p>
+              <p className="text-sm text-gray-600 mt-1">Alt. Namen: SDI (Serial Data In), DI, DIN, SI, MRST</p>
+            </div>
+            <div className="bg-purple-50 border-l-4 border-purple-500 p-5 rounded">
+              <h3 className="font-bold text-lg text-purple-900">SCLK / SCK (Serial Clock)</h3>
+              <p className="text-gray-700">Taktleitung vom Master (typisch 1-50 MHz)</p>
+              <p className="text-sm text-gray-600 mt-1">Push-Pull Ausgang, definiert Datenrate</p>
+            </div>
+            <div className="bg-orange-50 border-l-4 border-orange-500 p-5 rounded">
+              <h3 className="font-bold text-lg text-orange-900">SS / CS (Slave Select / Chip Select)</h3>
+              <p className="text-gray-700">Aktiviert einen bestimmten Slave (active LOW)</p>
+              <p className="text-sm text-gray-600 mt-1">Alt. Namen: CE (Chip Enable), NSS (Not Slave Select)</p>
+            </div>
+            <div className="bg-gray-100 border-l-4 border-gray-500 p-5 rounded mt-4">
+              <h3 className="font-bold text-lg text-gray-900">Elektrische Eigenschaften</h3>
+              <div className="grid grid-cols-2 gap-3 mt-2 text-sm">
+                <p className="text-gray-700">• Logic HIGH: 0.7 × VDD bis VDD</p>
+                <p className="text-gray-700">• Logic LOW: 0V bis 0.3 × VDD</p>
+                <p className="text-gray-700">• Ausgangsstrom: typ. 4-8 mA</p>
+                <p className="text-gray-700">• Pull-up/-down: 10-100 kΩ</p>
+              </div>
+            </div>
+          </div>
+        )
+      },
+      {
+        title: "Funktionsweise",
+        content: (
+          <div className="space-y-4">
+            <div className="mb-4">
+              <img src="https://www.ariat-tech.com/upfile/images/ce/20240702141736434.jpg" alt="SPI Funktionsweise" className="mx-auto max-h-48 rounded-lg shadow-lg" />
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">1</div>
+              <div className="pt-1">
+                <p className="text-lg font-semibold">Master aktiviert Slave über CS</p>
+                <p className="text-sm text-gray-600">CS-Leitung wird auf LOW gezogen (active-low)</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">2</div>
+              <div className="pt-1">
+                <p className="text-lg font-semibold">Master erzeugt Taktsignal</p>
+                <p className="text-sm text-gray-600">Frequenz bestimmt Datenrate (z.B. 8 MHz = 1 MB/s bei 8-bit)</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">3</div>
+              <div className="pt-1">
+                <p className="text-lg font-semibold">Shift-Register-Prinzip</p>
+                <p className="text-sm text-gray-600">Daten werden bitweise über MOSI/MISO ausgetauscht (MSB oder LSB first)</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">4</div>
+              <div className="pt-1">
+                <p className="text-lg font-semibold">Vollduplex-Übertragung</p>
+                <p className="text-sm text-gray-600">Gleichzeitiges Senden/Empfangen in jedem Taktzyklus</p>
+              </div>
+            </div>
+            <div className="bg-gray-100 border-l-4 border-gray-500 p-4 rounded mt-4">
+              <h3 className="font-bold text-md mb-2">Technische Details:</h3>
+              <div className="grid grid-cols-2 gap-2 text-sm text-gray-700">
+                <p>• Datenbreite: 8, 16, 32 bit</p>
+                <p>• Bit-Order: MSB/LSB first</p>
+                <p>• Setup-Zeit: 5-50 ns</p>
+                <p>• Hold-Zeit: 5-50 ns</p>
+              </div>
+            </div>
+            <div className="bg-yellow-50 border-2 border-yellow-400 p-4 rounded-lg mt-4">
+              <p className="font-semibold">Faustregel Leitungslänge: fCLK (MHz) · Länge (m) &lt; ~50 für ungeschirmte Kabel.</p>
+            </div>
+          </div>
+        )
+      },
+      {
+        title: "Taktmodi (Clock Polarity & Phase)",
+        content: (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-6">
+              <div className="bg-indigo-50 p-5 rounded-lg border-l-4 border-indigo-500">
+                <h3 className="font-bold text-xl mb-3 text-indigo-900">CPOL (Clock Polarity)</h3>
+                <p className="text-gray-700 mb-2">Bestimmt die Ruhelage des Taktsignals</p>
+                <p className="text-sm text-gray-600">• CPOL=0: CLK idle = LOW</p>
+                <p className="text-sm text-gray-600">• CPOL=1: CLK idle = HIGH</p>
+              </div>
+              <div className="bg-indigo-50 p-5 rounded-lg border-l-4 border-indigo-500">
+                <h3 className="font-bold text-xl mb-3 text-indigo-900">CPHA (Clock Phase)</h3>
+                <p className="text-gray-700 mb-2">Bestimmt Sampling-Zeitpunkt</p>
+                <p className="text-sm text-gray-600">• CPHA=0: Sample bei 1. Flanke</p>
+                <p className="text-sm text-gray-600">• CPHA=1: Sample bei 2. Flanke</p>
+              </div>
+            </div>
+            <div className="bg-gray-100 p-5 rounded-lg">
+              <h3 className="font-bold text-xl mb-4 text-center">Vier SPI-Modi (0-3)</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white p-4 rounded border-2 border-blue-300">
+                  <p className="font-bold text-lg">Modus 0</p>
+                  <p className="text-sm text-gray-600 mb-2">CPOL=0, CPHA=0</p>
+                  <p className="text-xs text-gray-500">Sample: rising edge, Setup: falling edge</p>
+                </div>
+                <div className="bg-white p-4 rounded border-2 border-green-300">
+                  <p className="font-bold text-lg">Modus 1</p>
+                  <p className="text-sm text-gray-600 mb-2">CPOL=0, CPHA=1</p>
+                  <p className="text-xs text-gray-500">Sample: falling edge, Setup: rising edge</p>
+                </div>
+                <div className="bg-white p-4 rounded border-2 border-purple-300">
+                  <p className="font-bold text-lg">Modus 2</p>
+                  <p className="text-sm text-gray-600 mb-2">CPOL=1, CPHA=0</p>
+                  <p className="text-xs text-gray-500">Sample: falling edge, Setup: rising edge</p>
+                </div>
+                <div className="bg-white p-4 rounded border-2 border-orange-300">
+                  <p className="font-bold text-lg">Modus 3</p>
+                  <p className="text-sm text-gray-600 mb-2">CPOL=1, CPHA=1</p>
+                  <p className="text-xs text-gray-500">Sample: rising edge, Setup: falling edge</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-yellow-50 border-2 border-yellow-400 p-4 rounded-lg">
+              <p className="font-semibold text-gray-800 text-center">⚠️ Master und Slave müssen denselben Modus verwenden!</p>
+              <p className="text-sm text-gray-600 text-center mt-1">Modus 0 und 3 sind am häufigsten implementiert</p>
+            </div>
+          </div>
+        )
+      },
+      {
+        title: "Vorteile",
+        content: (
+          <div className="space-y-4">
+            <div className="flex items-center gap-4 bg-green-50 p-5 rounded-lg">
+              <CheckCircle className="text-green-500 flex-shrink-0" size={32} />
+              <div>
+                <h3 className="font-bold text-lg">Sehr hohe Datenrate</h3>
+                <p className="text-gray-600">10-100 MHz möglich, typisch 1-50 MHz (10-1000× schneller als I²C)</p>
+                <p className="text-sm text-gray-500">Durchsatz: bis zu 12.5 MB/s bei 100 MHz</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 bg-green-50 p-5 rounded-lg">
+              <CheckCircle className="text-green-500 flex-shrink-0" size={32} />
+              <div>
+                <h3 className="font-bold text-lg">Vollduplex-Kommunikation</h3>
+                <p className="text-gray-600">Gleichzeitiges Senden und Empfangen über MOSI/MISO</p>
+                <p className="text-sm text-gray-500">Verdoppelt effektiven Datendurchsatz gegenüber Halbduplex</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 bg-green-50 p-5 rounded-lg">
+              <CheckCircle className="text-green-500 flex-shrink-0" size={32} />
+              <div>
+                <h3 className="font-bold text-lg">Einfache Hardware-Implementierung</h3>
+                <p className="text-gray-600">Basiert auf Shift-Registern, kein komplexes Protokoll</p>
+                <p className="text-sm text-gray-500">Geringer Ressourcenverbrauch in Mikrocontrollern</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 bg-green-50 p-5 rounded-lg">
+              <CheckCircle className="text-green-500 flex-shrink-0" size={32} />
+              <div>
+                <h3 className="font-bold text-lg">Geringer Protokoll-Overhead</h3>
+                <p className="text-gray-600">Keine Adress-Bits, Start/Stop-Bits oder ACK erforderlich</p>
+                <p className="text-sm text-gray-500">Nahezu 100% Nutzdateneffizienz</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 bg-green-50 p-5 rounded-lg">
+              <CheckCircle className="text-green-500 flex-shrink-0" size={32} />
+              <div>
+                <h3 className="font-bold text-lg">Flexible Datenraten</h3>
+                <p className="text-gray-600">Taktfrequenz frei wählbar, keine festen Baud-Raten</p>
+                <p className="text-sm text-gray-500">Dynamische Anpassung möglich</p>
+              </div>
+            </div>
+          </div>
+        )
+      },
+      {
+        title: "Nachteile",
+        content: (
+          <div className="space-y-4">
+            <div className="flex items-center gap-4 bg-red-50 p-5 rounded-lg">
+              <XCircle className="text-red-500 flex-shrink-0" size={32} />
+              <div>
+                <h3 className="font-bold text-lg">Mehr Leitungen als I²C</h3>
+                <p className="text-gray-600">Mindestens 4 Leitungen (I²C: nur 2)</p>
+                <p className="text-sm text-gray-500">Zusätzliche CS-Leitung pro Slave (n Slaves = 3+n Leitungen)</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 bg-red-50 p-5 rounded-lg">
+              <XCircle className="text-red-500 flex-shrink-0" size={32} />
+              <div>
+                <h3 className="font-bold text-lg">Kein Adressierungssystem</h3>
+                <p className="text-gray-600">Jeder Slave benötigt eigene CS-Leitung</p>
+                <p className="text-sm text-gray-500">Limitierung durch verfügbare GPIO-Pins am Master</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 bg-red-50 p-5 rounded-lg">
+              <XCircle className="text-red-500 flex-shrink-0" size={32} />
+              <div>
+                <h3 className="font-bold text-lg">Kein Fehlerhandling</h3>
+                <p className="text-gray-600">Keine eingebaute CRC, Parity oder ACK</p>
+                <p className="text-sm text-gray-500">Muss in Software implementiert werden (zusätzlicher Overhead)</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 bg-red-50 p-5 rounded-lg">
+              <XCircle className="text-red-500 flex-shrink-0" size={32} />
+              <div>
+                <h3 className="font-bold text-lg">Begrenzte Kabellängen</h3>
+                <p className="text-gray-600">Typisch max. 3m, bei hohen Frequenzen deutlich kürzer</p>
+                <p className="text-sm text-gray-500">Bei 50 MHz: max. ~10 cm ohne Signal-Integrität-Probleme</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 bg-red-50 p-5 rounded-lg">
+              <XCircle className="text-red-500 flex-shrink-0" size={32} />
+              <div>
+                <h3 className="font-bold text-lg">Keine Multi-Master-Unterstützung</h3>
+                <p className="text-gray-600">Nur ein Master kann aktiv sein</p>
+                <p className="text-sm text-gray-500">Komplexe Master-Arbitrierung notwendig bei Multi-Master</p>
+              </div>
+            </div>
+          </div>
+        )
+      },
+      {
+        title: "Vergleich zu anderen Bussen",
+        content: (
+          <div className="space-y-4">
+            <div className="bg-blue-50 p-5 rounded-lg border-l-4 border-blue-500">
+              <h3 className="font-bold text-xl mb-3 text-blue-900">SPI vs I²C</h3>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p className="font-semibold text-gray-800 mb-1">SPI</p>
+                  <p className="text-gray-700">• Geschwindigkeit: 10-100 MHz</p>
+                  <p className="text-gray-700">• Leitungen: 4+ (MOSI, MISO, SCK, CS)</p>
+                  <p className="text-gray-700">• Vollduplex</p>
+                  <p className="text-gray-700">• Kein Standard-Protokoll</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-800 mb-1">I²C</p>
+                  <p className="text-gray-700">• Geschwindigkeit: 100 kHz - 5 MHz</p>
+                  <p className="text-gray-700">• Leitungen: 2 (SDA, SCL)</p>
+                  <p className="text-gray-700">• Halbduplex</p>
+                  <p className="text-gray-700">• 7/10-bit Adressierung</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-purple-50 p-5 rounded-lg border-l-4 border-purple-500">
+              <h3 className="font-bold text-xl mb-3 text-purple-900">SPI vs UART</h3>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p className="font-semibold text-gray-800 mb-1">SPI</p>
+                  <p className="text-gray-700">• Synchron (gemeinsamer Takt)</p>
+                  <p className="text-gray-700">• Multi-Slave möglich</p>
+                  <p className="text-gray-700">• Kein Start/Stop-Bit</p>
+                  <p className="text-gray-700">• 4+ Leitungen</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-800 mb-1">UART</p>
+                  <p className="text-gray-700">• Asynchron (Baud-Rate)</p>
+                  <p className="text-gray-700">• Point-to-Point</p>
+                  <p className="text-gray-700">• Start/Stop/Parity-Bits</p>
+                  <p className="text-gray-700">• 2 Leitungen (TX, RX)</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-green-50 p-5 rounded-lg border-l-4 border-green-500">
+              <h3 className="font-bold text-xl mb-3 text-green-900">SPI vs CAN</h3>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p className="font-semibold text-gray-800 mb-1">SPI</p>
+                  <p className="text-gray-700">• Max. ~3m Kabellänge</p>
+                  <p className="text-gray-700">• 10-100 MHz</p>
+                  <p className="text-gray-700">• Keine Fehlerprüfung</p>
+                  <p className="text-gray-700">• Embedded-Systeme</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-800 mb-1">CAN</p>
+                  <p className="text-gray-700">• Bis 40m (1 Mbit/s)</p>
+                  <p className="text-gray-700">• 10 kbit/s - 1 Mbit/s</p>
+                  <p className="text-gray-700">• CRC, ACK, Error-Frames</p>
+                  <p className="text-gray-700">• Automobil, Industrie</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+      },
+      {
+        title: "Zusammenfassung",
+        content: (
+          <div className="space-y-8">
+            <div className="text-center">
+              <div className="text-6xl mb-6">🎯</div>
+              <h3 className="text-2xl font-bold mb-4 text-gray-800">
+                SPI ist ein schnelles, robustes, hardware-nahes Kommunikationsprotokoll
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 gap-4">
+              <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-lg text-center">
+                <p className="text-xl font-semibold">Optimal für kurze Distanzen und leistungsnahe Peripherie</p>
+              </div>
+              <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-lg text-center">
+                <p className="text-xl font-semibold">Standard in Embedded-Systemen und Mikrocontroller-Projekten</p>
+              </div>
+            </div>
+            <div className="bg-gray-100 p-6 rounded-lg">
+              <h4 className="font-bold text-lg mb-3 text-center">Ideal wenn...</h4>
+              <ul className="space-y-2 text-gray-700">
+                <li>• Hohe Geschwindigkeit benötigt wird</li>
+                <li>• Kurze Verbindungen vorliegen</li>
+                <li>• Einfache Implementierung gewünscht ist</li>
+                <li>• Vollduplex-Kommunikation erforderlich ist</li>
+              </ul>
+            </div>
+          </div>
+        )
+      }
+    ];
+
+    const nextSlide = () => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    };
+
+    const prevSlide = () => {
+      setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    };
+
+    const goToSlide = (index) => {
+      setCurrentSlide(index);
+    };
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
@@ -416,7 +549,7 @@
               )}
             </div>
 
-            <div className="p-12 min-h-[520px]">
+            <div className="p-12 min-h-[500px]">
               {slides[currentSlide].content}
             </div>
 
@@ -451,7 +584,9 @@
                     key={index}
                     onClick={() => goToSlide(index)}
                     className={`w-3 h-3 rounded-full transition-all ${
-                      index === currentSlide ? 'bg-blue-600 w-8' : 'bg-gray-300 hover:bg-gray-400'
+                      index === currentSlide
+                        ? 'bg-blue-600 w-8'
+                        : 'bg-gray-300 hover:bg-gray-400'
                     }`}
                     aria-label={`Gehe zu Folie ${index + 1}`}
                   />
@@ -464,6 +599,7 @@
     );
   };
 
+  // Render the app
   const root = ReactDOM.createRoot(document.getElementById('root'));
   root.render(<SPIPresentation />);
 </script>
